@@ -55,9 +55,6 @@ const (
 	outputFormat          = "session %s, Read Bytes: %d, Write Bytes: %d, Read Pkgs: %d, Write Pkgs: %d"
 )
 
-func init() {
-}
-
 // Session wrap connection between the server and the client
 type Session interface {
 	Connection
@@ -546,9 +543,20 @@ func (s *session) run() {
 	}
 
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Heartbeat panic occurs, error is %s", r)
+			}
+		}()
 		for {
-			<-time.After(s.period)
-			heartbeat(s)
+			select {
+			case <-s.done: // s.done is a blocked channel. if it has not been closed, the default branch will be invoked.
+				return
+			case <-time.After(s.period):
+				if err := heartbeat(s); err != nil {
+					log.Errorf("Heartbeat with error: %s", err)
+				}
+			}
 		}
 	}()
 
