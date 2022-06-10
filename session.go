@@ -31,8 +31,6 @@ import (
 import (
 	gxbytes "github.com/dubbogo/gost/bytes"
 	gxcontext "github.com/dubbogo/gost/context"
-	gxtime "github.com/dubbogo/gost/time"
-
 	"github.com/gorilla/websocket"
 
 	perrors "github.com/pkg/errors"
@@ -57,11 +55,7 @@ const (
 	outputFormat          = "session %s, Read Bytes: %d, Write Bytes: %d, Read Pkgs: %d, Write Pkgs: %d"
 )
 
-var defaultTimerWheel *gxtime.TimerWheel
-
 func init() {
-	gxtime.InitDefaultTimerWheel()
-	defaultTimerWheel = gxtime.GetDefaultTimerWheel()
 }
 
 // Session wrap connection between the server and the client
@@ -507,7 +501,7 @@ func (s *session) WriteBytesArray(pkgs ...[]byte) (int, error) {
 	return wlg, nil
 }
 
-func heartbeat(_ gxtime.TimerID, _ time.Time, arg interface{}) error {
+func heartbeat(arg interface{}) error {
 	ss, _ := arg.(*session)
 	if ss == nil || ss.IsClosed() {
 		return ErrSessionClosed
@@ -551,9 +545,12 @@ func (s *session) run() {
 		return
 	}
 
-	if _, err := defaultTimerWheel.AddTimer(heartbeat, gxtime.TimerLoop, s.period, s); err != nil {
-		panic(fmt.Sprintf("failed to add session %s to defaultTimerWheel err:%v", s.Stat(), err))
-	}
+	go func() {
+		for {
+			<-time.After(s.period)
+			heartbeat(s)
+		}
+	}()
 
 	s.grNum.Add(1)
 	// start read gr

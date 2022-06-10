@@ -33,8 +33,6 @@ import (
 import (
 	gxnet "github.com/dubbogo/gost/net"
 	gxsync "github.com/dubbogo/gost/sync"
-	gxtime "github.com/dubbogo/gost/time"
-
 	"github.com/gorilla/websocket"
 
 	perrors "github.com/pkg/errors"
@@ -292,7 +290,7 @@ func (s *server) runTCPEventLoop(newSession NewSessionCallback) {
 				return
 			}
 			if delay != 0 {
-				<-gxtime.After(delay)
+				<-time.After(delay)
 			}
 			client, err = s.accept(newSession)
 			if err != nil {
