@@ -24,6 +24,7 @@ import (
 	"io"
 	"net"
 	"runtime"
+	"runtime/debug"
 	"sync"
 	"time"
 )
@@ -543,18 +544,20 @@ func (s *session) run() {
 	}
 
 	go func() {
+		ticker := time.NewTicker(s.period)
 		defer func() {
+			ticker.Stop()
 			if r := recover(); r != nil {
-				log.Errorf("Heartbeat panic occurs, error is %s", r)
+				log.Errorf("Heartbeat panic occurs, error is %s, stack %v", r, string(debug.Stack()))
 			}
 		}()
 		for {
 			select {
 			case <-s.done: // s.done is a blocked channel. if it has not been closed, the default branch will be invoked.
 				return
-			case <-time.After(s.period):
+			case <-ticker.C:
 				if err := heartbeat(s); err != nil {
-					log.Errorf("Heartbeat with error: %s", err)
+					log.Errorf("sessioin %s, heartbeat with error: %s", s.sessionToken(), err)
 				}
 			}
 		}
