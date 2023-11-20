@@ -31,7 +31,6 @@ import (
 )
 
 import (
-	"github.com/dubbogo/gost/bytes"
 	"github.com/dubbogo/gost/net"
 	gxsync "github.com/dubbogo/gost/sync"
 	gxtime "github.com/dubbogo/gost/time"
@@ -144,6 +143,19 @@ func (c *client) EndPointType() EndPointType {
 	return c.endPointType
 }
 
+func fixIpV6URL(fullAddress string) string {
+	if strings.Contains(fullAddress, "[") {
+		return fullAddress
+	}
+
+	parts := strings.Split(fullAddress, ":")
+	if len(parts) <= 2 {
+		return fullAddress
+	}
+
+	return "[" + strings.Join(parts[0:len(parts)-1], ":") + "]:" + parts[len(parts)-1]
+}
+
 func (c *client) dialTCP() Session {
 	var (
 		err  error
@@ -154,6 +166,7 @@ func (c *client) dialTCP() Session {
 		if c.IsClosed() {
 			return nil
 		}
+		c.addr = fixIpV6URL(c.addr)
 		if c.sslEnabled {
 			if sslConfig, buildTlsConfErr := c.tlsConfigBuilder.BuildTlsConfig(); buildTlsConfErr == nil && sslConfig != nil {
 				d := &net.Dialer{Timeout: connectTimeout}
