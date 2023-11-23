@@ -23,7 +23,7 @@ import (
 )
 
 import (
-	"github.com/apache/dubbo-getty"
+	"github.com/skeyic/dubbo-getty"
 )
 
 type PackageHandler struct{}

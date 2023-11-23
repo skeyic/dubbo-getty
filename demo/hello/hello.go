@@ -18,7 +18,7 @@
 package hello
 
 import (
-	"github.com/apache/dubbo-getty"
+	"github.com/skeyic/dubbo-getty"
 )
 
 var Sessions []getty.Session

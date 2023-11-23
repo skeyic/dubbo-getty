@@ -27,9 +27,9 @@ import (
 )
 
 import (
-	"github.com/apache/dubbo-getty"
-	tls "github.com/apache/dubbo-getty/demo/hello/tls"
-	"github.com/apache/dubbo-getty/demo/util"
+	"github.com/skeyic/dubbo-getty"
+	tls "github.com/skeyic/dubbo-getty/demo/hello/tls"
+	"github.com/skeyic/dubbo-getty/demo/util"
 )
 
 var (

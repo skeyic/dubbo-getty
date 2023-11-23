@@ -34,7 +34,7 @@ import (
 
 import (
 	gxnet "github.com/AlexStocks/goext/net"
-	getty "github.com/apache/dubbo-getty"
+	getty "github.com/skeyic/dubbo-getty"
 )
 
 const (

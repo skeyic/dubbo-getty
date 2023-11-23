@@ -5,8 +5,9 @@ go 1.14
 require (
 	github.com/AlexStocks/goext v0.3.3
 	github.com/AlexStocks/log4go v1.0.7 // indirect
-	github.com/apache/dubbo-getty v1.4.9
 	github.com/dubbogo/gost v1.12.6-0.20220824084206-300e27e9e524
+	github.com/fatih/camelcase v1.0.0 // indirect
+	github.com/fatih/structs v1.1.0 // indirect
 	github.com/golang/snappy v0.0.1
 	github.com/gorilla/websocket v1.4.2
 	github.com/juju/errors v0.0.0-20210818161939-5560c4c073ff // indirect

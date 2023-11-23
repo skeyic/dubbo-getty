@@ -37,7 +37,7 @@ import (
 )
 
 import (
-	getty "github.com/apache/dubbo-getty"
+	getty "github.com/skeyic/dubbo-getty"
 )
 
 var (
