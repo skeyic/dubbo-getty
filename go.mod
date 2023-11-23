@@ -1,4 +1,4 @@
-module github.com/apache/dubbo-getty
+module github.com/skeyic/dubbo-getty
 
 go 1.14
 
