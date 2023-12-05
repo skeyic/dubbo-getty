@@ -674,10 +674,10 @@ func (s *session) handleTCPPackage() error {
 					break
 				}
 				pkg, pkgLen, err = s.reader.Read(s, pktBuf.Bytes())
-				// for case 3/case 4
-				if err == nil && s.maxMsgLen > 0 && pkgLen > int(s.maxMsgLen) {
-					err = perrors.Errorf("pkgLen %d > session max message len %d", pkgLen, s.maxMsgLen)
-				}
+				//// for case 3/case 4
+				//if err == nil && s.maxMsgLen > 0 && pkgLen > int(s.maxMsgLen) {
+				//	err = perrors.Errorf("pkgLen %d > session max message len %d", pkgLen, s.maxMsgLen)
+				//}
 				// handle case 1
 				if err != nil {
 					log.Warnf("%s, [session.handleTCPPackage] = len{%d}, error:%+v",
